@@ -8,11 +8,12 @@
 import SwiftUI
 
 struct SpotifyRecentsCell: View {
+    var imageName = Constants.staticImage
     var title: String = "Recent title content"
     
     var body: some View {
         HStack {
-            ImageLoaderView()
+            ImageLoaderView(imageName: imageName)
                 .frame(width: 55, height: 55)
             
             Text(title)
