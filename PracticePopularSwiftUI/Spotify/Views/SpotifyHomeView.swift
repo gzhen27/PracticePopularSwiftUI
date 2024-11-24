@@ -15,20 +15,28 @@ struct SpotifyHomeView: View {
         ZStack {
             Color.spotifyBlack.ignoresSafeArea()
             ScrollView {
-                header
-                ForEach(0..<20) { _ in
-                    RoundedRectangle(cornerRadius: 16)
-                        .frame(width: .infinity, height: 200)
-                        .foregroundStyle(.spotifyWhite)
-                        .padding(.horizontal)
-                        .padding(.vertical, 8)
+                LazyVStack(pinnedViews: [.sectionHeaders]) {
+                    Section {
+                        ForEach(0..<20) { _ in
+                            RoundedRectangle(cornerRadius: 16)
+                                .frame(width: .infinity, height: 200)
+                                .foregroundStyle(.spotifyWhite)
+                                .padding(.horizontal)
+                                .padding(.vertical, 8)
+                        }
+                    } header: {
+                        header
+                    }
                 }
+                .padding(.top, 8)
             }
             .scrollIndicators(.hidden)
+            .clipped()
         }
         .task {
             await fetchUser()
         }
+        .toolbar(.hidden, for: .navigationBar)
     }
     
     private var header: some View {
@@ -53,10 +61,13 @@ struct SpotifyHomeView: View {
                         }
                     }
                 }
-                .padding(.horizontal )
+                .padding(.horizontal, 16)
             }
             .scrollIndicators(.hidden)
         }
+        .padding(.vertical, 24)
+        .padding(.leading, 8)
+        .background(.spotifyBlack)
     }
     
     private func fetchUser() async {
