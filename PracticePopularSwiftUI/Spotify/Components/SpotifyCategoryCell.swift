@@ -8,11 +8,27 @@
 import SwiftUI
 
 struct SpotifyCategoryCell: View {
+    var title: String = "All"
+    var isSelected: Bool = false
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        Text(title)
+            .font(.callout)
+            .frame(minWidth: 35)
+            .padding(.vertical, 8)
+            .padding(.horizontal, 10)
+            .background(isSelected ? .spotifyGreen : .spotifyDarkGray)
+            .foregroundStyle(isSelected ? Color.spotifyBlack : .spotifyWhite)
+            .clipShape(RoundedRectangle(cornerRadius: 16))
     }
 }
 
 #Preview {
-    SpotifyCategoryCell()
+    ZStack {
+        Color.spotifyBlack.ignoresSafeArea()
+        VStack(spacing: 40) {
+            SpotifyCategoryCell()
+            SpotifyCategoryCell(isSelected: true)
+        }
+    }
 }

@@ -9,6 +9,7 @@ import SwiftUI
 
 struct SpotifyHomeView: View {
     @State private var currentUser: User?
+    @State private var selectedCategory: Category? = .all
     
     var body: some View {
         ZStack {
@@ -26,10 +27,14 @@ struct SpotifyHomeView: View {
                 }
                 ScrollView(.horizontal) {
                     HStack(spacing: 8) {
-                        ForEach(0..<20) { _ in
-                            RoundedRectangle(cornerRadius: 4)
-                                .fill(Color.spotifyWhite)
-                                .frame(width: 20, height: 20)
+                        ForEach(Category.allCases, id: \.self) { category in
+                            SpotifyCategoryCell(
+                                title: category.rawValue.capitalized,
+                                isSelected: category == selectedCategory
+                            )
+                            .onTapGesture {
+                                selectedCategory = category
+                            }
                         }
                     }
                 }
