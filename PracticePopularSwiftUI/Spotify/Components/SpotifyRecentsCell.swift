@@ -20,10 +20,9 @@ struct SpotifyRecentsCell: View {
                 .fontWeight(.semibold)
                 .lineLimit(2)
         }
-        .foregroundStyle(.spotifyDarkGray)
         .padding(.trailing, 6)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color.spotifyWhite)
+        .themeColor(isSelected: false)
         .clipShape(RoundedRectangle(cornerRadius: 6))
     }
 }
