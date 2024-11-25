@@ -23,4 +23,6 @@ struct Product: Codable, Identifiable {
     let minimumOrderQuantity: Int
     let images: [String]
     let thumbnail: String
+    
+    var heroImage: String { images.first ?? Constants.staticImage }
 }
