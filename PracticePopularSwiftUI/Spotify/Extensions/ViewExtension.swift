@@ -7,7 +7,7 @@
 import SwiftUI
 
 extension View {
-    func themeColor(isSelected: Bool) -> some View {
+    func themeColor(isSelected: Bool = false) -> some View {
         self
             .background(isSelected ? .spotifyGreen : .spotifyDarkGray)
             .foregroundStyle(isSelected ? Color.spotifyBlack : .spotifyWhite)

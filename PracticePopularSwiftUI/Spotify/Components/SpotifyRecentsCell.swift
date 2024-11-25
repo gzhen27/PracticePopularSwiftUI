@@ -23,7 +23,7 @@ struct SpotifyRecentsCell: View {
         }
         .padding(.trailing, 6)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .themeColor(isSelected: false)
+        .themeColor()
         .clipShape(RoundedRectangle(cornerRadius: 6))
     }
 }
