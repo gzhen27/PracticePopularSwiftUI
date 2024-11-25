@@ -30,7 +30,7 @@ struct SpotifyNewReleaseCell: View {
                     }
                     if let subheadline {
                         Text(subheadline)
-                            .font(.title)
+                            .font(.title2)
                             .fontWeight(.medium)
                             .foregroundStyle(.spotifyWhite)
                     }
@@ -52,6 +52,7 @@ struct SpotifyNewReleaseCell: View {
                         if let subtitle {
                             Text(subtitle)
                                 .foregroundStyle(.spotifyLightGray)
+                                .lineLimit(3)
                         }
                     }
                     .font(.callout)
@@ -74,6 +75,7 @@ struct SpotifyNewReleaseCell: View {
                     }
                 }
                 .padding(.trailing)
+                .frame(height: 140)
             }
             .themeColor()
             .clipShape(RoundedRectangle(cornerRadius: 8))

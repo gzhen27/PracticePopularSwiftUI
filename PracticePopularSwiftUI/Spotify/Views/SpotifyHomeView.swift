@@ -19,6 +19,10 @@ struct SpotifyHomeView: View {
                 LazyVStack(pinnedViews: [.sectionHeaders]) {
                     Section {
                         recentSection
+                        if let product = products.first {
+                            newReleaseSection(product: product)
+
+                        }
                         ForEach(0..<20) { _ in
                             RoundedRectangle(cornerRadius: 16)
                                 .frame(width: .infinity, height: 200)
@@ -88,6 +92,19 @@ struct SpotifyHomeView: View {
                 SpotifyRecentsCell(imageName: product.heroImage, title: product.title)
             }
         }
+    }
+    
+    private func newReleaseSection(product: Product) -> some View {
+        SpotifyNewReleaseCell(
+            imageName: product.heroImage,
+            headline: product.brand,
+            subheadline: product.title,
+            title: product.title,
+            subtitle: product.description) {
+                print("pressed the add button")
+            } onPlayPressed: {
+                print("pressed the play button")
+            }
     }
 }
 
