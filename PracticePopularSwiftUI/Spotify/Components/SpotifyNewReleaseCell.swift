@@ -13,6 +13,8 @@ struct SpotifyNewReleaseCell: View {
     var subheadline: String? = "Discover it"
     var title: String? = "Product title"
     var subtitle: String? = "Product subtitle"
+    var onAddToPlaylistPressed: (() -> Void)?
+    var onPlayPressed: (() -> Void)?
     
     var body: some View {
         VStack(spacing: 16) {
@@ -58,23 +60,26 @@ struct SpotifyNewReleaseCell: View {
                         Image(systemName: "plus.circle")
                             .foregroundStyle(.spotifyLightGray)
                             .font(.title3)
+                            .padding(4)
+                            .background(.black.opacity(0.001))
                             .onTapGesture {
-                                
+                                onAddToPlaylistPressed?()
                             }
+                            .offset(x: -4)
                             .frame(maxWidth: .infinity, alignment: .leading)
                         
                         Image(systemName: "play.circle.fill")
                             .foregroundStyle(.spotifyWhite)
                             .font(.title)
-                            .onTapGesture {
-                                
-                            }
                     }
                 }
                 .padding(.trailing)
             }
             .themeColor()
             .clipShape(RoundedRectangle(cornerRadius: 8))
+            .onTapGesture {
+                onPlayPressed?()
+            }
         }
     }
 }
