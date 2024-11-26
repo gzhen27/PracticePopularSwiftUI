@@ -7,10 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EBB11E242CF6801600B03744 /* SpotifyPlaylistView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB11E232CF6801600B03744 /* SpotifyPlaylistView.swift */; };
 		EBE151C82CF26951006D8172 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = EBE151C72CF26951006D8172 /* SDWebImageSwiftUI */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		EBB11E232CF6801600B03744 /* SpotifyPlaylistView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SpotifyPlaylistView.swift; path = PracticePopularSwiftUI/Spotify/Views/SpotifyPlaylistView.swift; sourceTree = "<group>"; };
 		EBE151B52CF264F0006D8172 /* PracticePopularSwiftUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PracticePopularSwiftUI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -37,6 +39,7 @@
 		EBE151AC2CF264F0006D8172 = {
 			isa = PBXGroup;
 			children = (
+				EBB11E232CF6801600B03744 /* SpotifyPlaylistView.swift */,
 				EBE151B72CF264F0006D8172 /* PracticePopularSwiftUI */,
 				EBE151B62CF264F0006D8172 /* Products */,
 			);
@@ -128,6 +131,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EBB11E242CF6801600B03744 /* SpotifyPlaylistView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
