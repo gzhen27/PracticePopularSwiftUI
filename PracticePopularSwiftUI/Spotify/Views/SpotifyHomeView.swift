@@ -11,6 +11,7 @@ struct SpotifyHomeView: View {
     @State private var currentUser: User?
     @State private var products: [Product] = []
     @State private var selectedCategory: Category? = .all
+    @State private var productRows: [ProductRow] = []
     
     var body: some View {
         ZStack {
@@ -19,18 +20,12 @@ struct SpotifyHomeView: View {
                 LazyVStack(pinnedViews: [.sectionHeaders]) {
                     Section {
                         recentSection
+                            .padding(.horizontal, 16)
                         if let product = products.first {
                             newReleaseSection(product: product)
-
+                                .padding(.horizontal, 16)
                         }
-                        ForEach(0..<20) { _ in
-                            RoundedRectangle(cornerRadius: 16)
-                                .frame(width: .infinity, height: 200)
-                                .foregroundStyle(.spotifyWhite)
-                                .padding(.horizontal)
-                                .padding(.vertical, 8)
-                        }
-                        .padding(.top, 32)
+                        listRows
                     } header: {
                         header
                     }
@@ -50,6 +45,13 @@ struct SpotifyHomeView: View {
         do {
             currentUser = try await DataCenter.getUsers().first
             products = try await Array(DataCenter.getProducts().prefix(8))
+            
+            var rows: [ProductRow] = []
+            let allBrands = Set(products.map({ $0.brand }))
+            for brand in allBrands {
+                rows.append(ProductRow(title: brand?.capitalized ?? "", products: products))
+            }
+            productRows = rows
         } catch {
             
         }
@@ -90,6 +92,35 @@ struct SpotifyHomeView: View {
         LazyVGrid(columns: [GridItem(), GridItem()], alignment: .center, spacing: 10) {
             ForEach(products) { product in
                 SpotifyRecentsCell(imageName: product.heroImage, title: product.title)
+                    .asButton {
+                        
+                    }
+            }
+        }
+    }
+    
+    private var listRows: some View {
+        ForEach(productRows) { row in
+            VStack(spacing: 8) {
+                Text(row.title)
+                    .font(.title)
+                    .fontWeight(.semibold)
+                    .foregroundColor(.spotifyWhite)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal, 16)
+                ScrollView(.horizontal) {
+                    HStack(alignment: .top) {
+                        ForEach(row.products) { product in
+                            SpotifyImageTile(
+                                imageName: product.heroImage,
+                                imageSize: 120,
+                                title: product.title
+                            )
+                        }
+                    }
+                    .padding(.horizontal, 16)
+                }
+                .scrollIndicators(.hidden)
             }
         }
     }
