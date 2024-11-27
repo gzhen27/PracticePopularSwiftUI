@@ -16,21 +16,25 @@ struct SpotifySongItem: View {
     var moreAction: (() -> Void)? = nil
     
     var body: some View {
-        HStack(spacing: 0) {
+        HStack(spacing: 8) {
             ImageLoaderView(imageName: imageName)
                 .frame(width: imageSize, height: imageSize)
             VStack(alignment: .leading, spacing: 4) {
                 Text(name)
                     .lineLimit(1)
+                    .font(.body)
+                    .fontWeight(.medium)
                     .foregroundStyle(.spotifyWhite)
                 Text(madeBy)
                     .lineLimit(1)
+                    .font(.callout)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .frame(height: imageSize, alignment: .top)
-            .padding(.horizontal, 8)
             Image(systemName: "ellipsis")
-                .padding(8)
+                .font(.subheadline)
+                .padding(16)
+                .background(Color.spotifyBlack.opacity(00.001))
                 .asButton {
                     moreAction?()
                 }
