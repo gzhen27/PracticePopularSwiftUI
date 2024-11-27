@@ -45,6 +45,7 @@ struct SpotifyPlaylistHeaderCell: View {
                 alignment: .bottomLeading
             )
             .asStretchyHeader(startingHeight: height)
+            .frame(height: height)
     }
 }
 
