@@ -27,24 +27,16 @@ struct SpotifyPlaylistView: View {
                         imageName: product.heroImage,
                         height: 250
                     )
-                    SpotifyPlaylistDescription(
-                        descriptionText: product.description,
-                        userName: user.firstName,
-                        subheadline: product.title
-                    )
-                    ForEach(products) { product in
-                        SpotifySongItem(
-                            imageName: product.heroImage,
-                            imageSize: 50,
-                            name: product.title,
-                            madeBy: product.description) {
-                                
-                            } moreAction: {
-                                
-                            }
-                            .padding(.leading)
-
+                    VStack {
+                        SpotifyPlaylistDescription(
+                            descriptionText: product.description,
+                            userName: user.firstName,
+                            subheadline: product.title
+                        )
+                        songsSection
                     }
+                    .padding(.leading)
+
                 }
             }
         }
@@ -58,6 +50,20 @@ struct SpotifyPlaylistView: View {
             products = try await DataCenter.getProducts()
         } catch {
             
+        }
+    }
+    
+    private var songsSection: some View {
+        ForEach(products) { product in
+            SpotifySongItem(
+                imageName: product.heroImage,
+                imageSize: 50,
+                name: product.title,
+                madeBy: product.description) {
+                    
+                } moreAction: {
+                    
+                }
         }
     }
 }
