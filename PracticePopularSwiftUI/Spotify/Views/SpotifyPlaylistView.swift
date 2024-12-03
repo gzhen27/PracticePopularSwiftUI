@@ -28,6 +28,9 @@ struct SpotifyPlaylistView: View {
                         imageName: product.heroImage,
                         height: 250
                     )
+                    .readingFrame { frame in
+                        showNavBar = frame.maxY < 150
+                    }
                     VStack {
                         SpotifyPlaylistDescription(
                             descriptionText: product.description,
