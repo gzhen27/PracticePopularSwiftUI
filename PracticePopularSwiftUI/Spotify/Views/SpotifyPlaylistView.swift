@@ -64,7 +64,8 @@ struct SpotifyPlaylistView: View {
                 .font(.headline)
                 .padding(.vertical, 20)
                 .frame(maxWidth: .infinity)
-                .background(.blue)
+                .background(.spotifyBlack)
+                .offset(y: showNavBar ? 0 : -40)
                 .opacity(showNavBar ? 1 : 0)
             
             Image(systemName: "chevron.left")
@@ -76,6 +77,7 @@ struct SpotifyPlaylistView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
         .foregroundStyle(.spotifyWhite)
+        .animation(.smooth(duration: 0.25), value: showNavBar)
         .frame(maxHeight: .infinity, alignment: .top)
     }
     
