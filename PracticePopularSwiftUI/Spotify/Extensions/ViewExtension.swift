@@ -27,6 +27,10 @@ extension View {
             .background(isSelected ? .spotifyGreen : .spotifyDarkGray)
             .foregroundStyle(isSelected ? Color.spotifyBlack : .spotifyWhite)
     }
+    
+    func readingFrame(coordinateSpace: CoordinateSpace = .global, onChange: @escaping (_ frame: CGRect) -> ()) -> some View {
+        background(FrameReader(coordinationSpace: coordinateSpace, onChange: onChange))
+    }
 }
 
 struct ButtonStyleViewModifier: ButtonStyle {
@@ -67,6 +71,23 @@ struct StretchyHeaderViewModifier: ViewModifier {
     private func stretchedOffset(_ geo: GeometryProxy) -> CGFloat {
         let offset = yOffset(geo)
         return offset > 0 ? -offset : 0
+    }
+}
+
+struct FrameReader: View {
+    let coordinationSpace: CoordinateSpace
+    let onChange: (_ frame: CGRect) -> Void
+    
+    var body: some View {
+        GeometryReader { geo in
+            Text("")
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .onAppear {
+                    onChange(geo.frame(in: coordinationSpace))
+                }
+                .onChange(of: geo.frame(in: coordinationSpace), perform: onChange)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 
