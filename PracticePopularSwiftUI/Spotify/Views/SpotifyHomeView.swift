@@ -6,12 +6,16 @@
 //
 
 import SwiftUI
+import SwiftfulRouting
 
 struct SpotifyHomeView: View {
+    @Environment(\.router) var router
+    
     @State private var currentUser: User?
     @State private var products: [Product] = []
     @State private var selectedCategory: Category? = .all
     @State private var productRows: [ProductRow] = []
+    @State private var showPlaylistView = false
     
     var body: some View {
         ZStack {
@@ -39,9 +43,12 @@ struct SpotifyHomeView: View {
             await fetch()
         }
         .toolbar(.hidden, for: .navigationBar)
+        .navigationBarHidden(true)
     }
 
     private func fetch() async {
+        guard products.isEmpty else { return }
+        
         do {
             currentUser = try await DataCenter.getUsers().first
             products = try await Array(DataCenter.getProducts().prefix(8))
@@ -64,6 +71,9 @@ struct SpotifyHomeView: View {
                     ImageLoaderView()
                         .background(.spotifyWhite)
                         .clipShape(Circle())
+                        .asButton {
+                            router.dismissScreen()
+                        }
                 }
             }
             .frame(width: 35, height: 35)
@@ -93,7 +103,7 @@ struct SpotifyHomeView: View {
             ForEach(products) { product in
                 SpotifyRecentsCell(imageName: product.heroImage, title: product.title)
                     .asButton {
-                        
+                        goToPlayListView(product: product)
                     }
             }
         }
@@ -116,12 +126,22 @@ struct SpotifyHomeView: View {
                                 imageSize: 120,
                                 title: product.title
                             )
+                            .asButton {
+                                goToPlayListView(product: product)
+                            }
                         }
                     }
                     .padding(.horizontal, 16)
                 }
                 .scrollIndicators(.hidden)
             }
+        }
+    }
+    
+    private func goToPlayListView(product: Product) {
+        guard let currentUser else { return }
+        router.showScreen(.push) { _ in
+            SpotifyPlaylistView(product: product, user: currentUser)
         }
     }
     
@@ -134,11 +154,13 @@ struct SpotifyHomeView: View {
             subtitle: product.description) {
                 print("pressed the add button")
             } onPlayPressed: {
-                print("pressed the play button")
+                goToPlayListView(product: product)
             }
     }
 }
 
 #Preview {
-    SpotifyHomeView()
+    RouterView { _ in
+        SpotifyHomeView()
+    }
 }
