@@ -5,6 +5,8 @@
 //  Created by G Zhen on 11/23/24.
 //
 
+import Foundation
+
 struct Products: Codable {
     let products: [Product]
     let total, skip, limit: Int
@@ -23,4 +25,34 @@ struct Product: Codable, Identifiable {
     let minimumOrderQuantity: Int
     let images: [String]
     let thumbnail: String
+    
+    var heroImage: String { images.first ?? Constants.staticImage }
+    
+    static var mock: Product {
+        Product(
+            id: 123,
+            title: "Mock product title",
+            description: "Mock product description",
+            price: 999,
+            discountPercentage: 15,
+            rating: 4.9,
+            stock: 50,
+            tags: ["item"],
+            brand: "Brand",
+            sku: "sku",
+            weight: 12,
+            warrantyInformation: "warrantyInformation",
+            shippingInformation: "warrantyInformation",
+            minimumOrderQuantity: 12,
+            images: [Constants.staticImage, Constants.staticImage, Constants.staticImage],
+            thumbnail: Constants.staticImage
+        )
+    }
+    
+}
+
+struct ProductRow: Identifiable {
+    let id = UUID().uuidString
+    let title: String
+    let products: [Product]
 }

@@ -9,12 +9,12 @@ import SwiftUI
 import SDWebImageSwiftUI
 
 struct ImageLoaderView: View {
-    var imageUrl = Constants.staticImage
+    var imageName = Constants.staticImage
     
     var body: some View {
-        RoundedRectangle(cornerRadius: 30)
+        RoundedRectangle(cornerRadius: 8)
             .overlay {
-                WebImage(url: URL(string: imageUrl))
+                WebImage(url: URL(string: imageName))
                     .resizable()
                     .indicator(.activity)
                     .aspectRatio(contentMode: .fill)
@@ -28,7 +28,5 @@ struct ImageLoaderView: View {
 
 #Preview {
     ImageLoaderView()
-//        .clipShape(RoundedRectangle(cornerRadius: 30))
-        .padding(40)
-        .padding(.vertical, 60)
+        .frame(width: 100, height: 100)
 }
