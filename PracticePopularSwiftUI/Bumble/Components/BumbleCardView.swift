@@ -10,15 +10,30 @@ import SwiftUI
 struct BumbleCardView: View {
     var user: User = .mock
     
+    @State private var cardFrame: CGRect = .zero
+    
     var body: some View {
         ScrollView {
             LazyVStack(spacing: 0) {
                 header
-                    .frame(height: 700)
+                    .frame(height: cardFrame.height)
+                
+                aboutMe
+                    .padding(24)
             }
         }
-        .clipShape(RoundedRectangle(cornerRadius: 32))
         .scrollIndicators(.hidden)
+        .background(.bumbleBGYellow)
+        .clipShape(RoundedRectangle(cornerRadius: 32))
+        .readingFrame { frame in
+            cardFrame = frame
+        }
+    }
+    
+    private func sectionTitle(_ title: String) -> some View {
+        Text(title)
+            .font(.body)
+            .foregroundStyle(.bumbleGray)
     }
     
     private var header: some View {
@@ -60,6 +75,30 @@ struct BumbleCardView: View {
                 )
             )
         }
+    }
+    
+    private var aboutMe: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            sectionTitle("About me")
+            
+            Text(user.aboutMe)
+                .font(.body)
+                .fontWeight(.semibold)
+                .foregroundStyle(.bumbleBlack)
+            
+            HStack(spacing: 0) {
+                BumbleHeartView()
+                
+                Text("Send a Compliment")
+                    .font(.caption)
+                    .fontWeight(.semibold)
+            }
+            .padding(.horizontal, 8)
+            .padding(.trailing, 8)
+            .background(.bumbleYellow)
+            .clipShape(RoundedRectangle(cornerRadius: 32))
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
 
