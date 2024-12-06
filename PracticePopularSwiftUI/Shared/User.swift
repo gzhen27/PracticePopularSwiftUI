@@ -24,6 +24,24 @@ struct User: Codable, Identifiable {
     var education: String { "Studying at home" }
     var aboutMe: String { "This is me This is me This is me This is me" }
     
+    var basics: [UserInterest] {
+        [
+            UserInterest(iconName: "ruler", emoji: nil, text: "\(height)"),
+            UserInterest(iconName: "graduationcap", emoji: nil, text: education),
+            UserInterest(iconName: "wineglass", emoji: nil, text: "Socially"),
+            UserInterest(iconName: "moon.starts.fill", emoji: nil, text: "Virgo"),
+        ]
+    }
+    
+    var interests: [UserInterest] {
+        [
+            UserInterest(iconName: nil, emoji: "🐰", text: "Running"),
+            UserInterest(iconName: nil, emoji: "🐯", text: "Gaming"),
+            UserInterest(iconName: nil, emoji: "🦉", text: "Sleeping"),
+            UserInterest(iconName: nil, emoji: "🦅", text: "Flying"),
+        ]
+    }
+    
     static var mock: User {
         User(
             id: 777,
