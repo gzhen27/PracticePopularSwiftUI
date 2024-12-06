@@ -9,37 +9,40 @@ import SwiftUI
 
 struct BumbleCardView: View {
     var user: User = .mock
+    var onSuperLikePressed: (() -> Void)? = nil
+    var onXmarkPressed: (() -> Void)? = nil
+    var onCheckmarkPressed: (() -> Void)? = nil
+    var onSendAComplimentPresssed: (() -> Void)? = nil
+    var onHideAndReportPressed: (() -> Void)? = nil
     
     @State private var cardFrame: CGRect = .zero
     
     var body: some View {
         ScrollView {
             LazyVStack(spacing: 0) {
-//                header
-//                    .frame(height: cardFrame.height)
+                header
+                    .frame(height: cardFrame.height)
                 
                 aboutMe
                     .padding(24)
                 
-//                myInterests
-//                    .padding(.horizontal, 24)
-//                    .padding(.bottom, 24)
-                
-//                ForEach(user.images, id: \.self) { img in
-//                    ImageLoaderView(imageName: img)
-//                        .frame(height: cardFrame.height)
-//                }
-                
-                myLocation
+                myInterests
                     .padding(.horizontal, 24)
                     .padding(.bottom, 24)
                 
-                cardButtons
+                myImages
+                
+                myLocation
+                    .padding(24)
+                
+                footerSection
                     .padding(.horizontal, 36)
+                    .padding(.bottom, 60)
             }
         }
         .scrollIndicators(.hidden)
         .background(.bumbleBGYellow)
+        .overlay(superLikeButton, alignment: .bottomTrailing)
         .clipShape(RoundedRectangle(cornerRadius: 32))
         .readingFrame { frame in
             cardFrame = frame
@@ -124,6 +127,9 @@ struct BumbleCardView: View {
             .padding(.trailing, 8)
             .background(.bumbleYellow)
             .clipShape(RoundedRectangle(cornerRadius: 32))
+            .asButton {
+                onSendAComplimentPresssed?()
+            }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
@@ -140,6 +146,13 @@ struct BumbleCardView: View {
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
+    }
+    
+    private var myImages: some View {
+        ForEach(user.images, id: \.self) { img in
+            ImageLoaderView(imageName: img)
+                .frame(height: cardFrame.height)
+        }
     }
     
     private var myLocation: some View {
@@ -161,22 +174,46 @@ struct BumbleCardView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
     }
     
-    private var cardButtons: some View {
+    private var footerSection: some View {
         VStack(spacing: 24) {
             HStack(spacing: 0) {
                 cardButtonView("xmark")
                     .asButton {
-                        print("no")
+                        onXmarkPressed?()
                     }
                 
                 Spacer(minLength: 0)
                 
                 cardButtonView("checkmark")
                     .asButton {
-                        print("yes")
+                        onCheckmarkPressed?()
                     }
             }
+            
+            Text("Hide and Report")
+                .font(.headline)
+                .foregroundStyle(.bumbleGray)
+                .padding(8)
+                .background(.bumbleBlack.opacity(0.001))
+                .onTapGesture {
+                    onHideAndReportPressed?()
+                }
         }
+    }
+    
+    private var superLikeButton: some View {
+        Image(systemName: "hexagon.fill")
+            .foregroundStyle(.bumbleYellow)
+            .font(.system(size: 60))
+            .overlay(
+                Image(systemName: "star.fill")
+                    .foregroundStyle(.bumbleBlack)
+                    .font(.system(size: 30, weight: .medium))
+            )
+            .padding(24)
+            .asButton {
+                onSuperLikePressed?()
+            }
     }
 }
 
