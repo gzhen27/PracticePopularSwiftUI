@@ -21,13 +21,21 @@ struct BumbleCardView: View {
                 aboutMe
                     .padding(24)
                 
-                myInterests
-                    .padding(24)
+//                myInterests
+//                    .padding(.horizontal, 24)
+//                    .padding(.bottom, 24)
                 
-                ForEach(user.images, id: \.self) { img in
-                    ImageLoaderView(imageName: img)
-                        .frame(height: cardFrame.height)
-                }
+//                ForEach(user.images, id: \.self) { img in
+//                    ImageLoaderView(imageName: img)
+//                        .frame(height: cardFrame.height)
+//                }
+                
+                myLocation
+                    .padding(.horizontal, 24)
+                    .padding(.bottom, 24)
+                
+                cardButtons
+                    .padding(.horizontal, 36)
             }
         }
         .scrollIndicators(.hidden)
@@ -42,6 +50,17 @@ struct BumbleCardView: View {
         Text(title)
             .font(.body)
             .foregroundStyle(.bumbleGray)
+    }
+    
+    private func cardButtonView(_ iconName: String) -> some View {
+        Circle()
+            .fill(.bumbleYellow)
+            .overlay {
+                Image(systemName: iconName)
+                    .font(.title)
+                    .fontWeight(.semibold)
+            }
+            .frame(width: 50, height: 50)
     }
     
     private var header: some View {
@@ -121,6 +140,43 @@ struct BumbleCardView: View {
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
+    }
+    
+    private var myLocation: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack(spacing: 8) {
+                Image(systemName: "mappin.and.ellipse.circle.fill")
+                Text(user.firstName + "'s Location")
+            }
+            .foregroundStyle(.bumbleGray)
+            .font(.body)
+            .fontWeight(.medium)
+            
+            Text("999999 mile away")
+                .font(.headline)
+                .foregroundStyle(.bumbleBlack)
+            
+            BumblePillView(emoji: "🇱🇷", text: "Lives in United States")
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+    
+    private var cardButtons: some View {
+        VStack(spacing: 24) {
+            HStack(spacing: 0) {
+                cardButtonView("xmark")
+                    .asButton {
+                        print("no")
+                    }
+                
+                Spacer(minLength: 0)
+                
+                cardButtonView("checkmark")
+                    .asButton {
+                        print("yes")
+                    }
+            }
+        }
     }
 }
 
