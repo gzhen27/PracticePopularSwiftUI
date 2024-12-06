@@ -42,6 +42,10 @@ struct User: Codable, Identifiable {
         ]
     }
     
+    var images: [String] {
+        ["\(Constants.staticImage)?id=1", "\(Constants.staticImage)?id=2", "\(Constants.staticImage)?id=3"]
+    }
+    
     static var mock: User {
         User(
             id: 777,

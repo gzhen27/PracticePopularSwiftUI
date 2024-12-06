@@ -15,13 +15,19 @@ struct BumbleCardView: View {
     var body: some View {
         ScrollView {
             LazyVStack(spacing: 0) {
-                header
-                    .frame(height: cardFrame.height)
+//                header
+//                    .frame(height: cardFrame.height)
                 
                 aboutMe
                     .padding(24)
+                
                 myInterests
                     .padding(24)
+                
+                ForEach(user.images, id: \.self) { img in
+                    ImageLoaderView(imageName: img)
+                        .frame(height: cardFrame.height)
+                }
             }
         }
         .scrollIndicators(.hidden)
