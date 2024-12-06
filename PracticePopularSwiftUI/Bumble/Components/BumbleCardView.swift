@@ -20,6 +20,8 @@ struct BumbleCardView: View {
                 
                 aboutMe
                     .padding(24)
+                myInterests
+                    .padding(24)
             }
         }
         .scrollIndicators(.hidden)
@@ -97,6 +99,20 @@ struct BumbleCardView: View {
             .padding(.trailing, 8)
             .background(.bumbleYellow)
             .clipShape(RoundedRectangle(cornerRadius: 32))
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+    
+    private var myInterests: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            VStack(alignment: .leading, spacing: 8) {
+                sectionTitle("My basic")
+                BumblePillGridView(interests: user.basics)
+            }
+            VStack(alignment: .leading, spacing: 8) {
+                sectionTitle("My interests")
+                BumblePillGridView(interests: user.interests)
+            }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
