@@ -11,6 +11,7 @@ struct BumbleHomeView: View {
     @State private var filters: [String] = ["Everyone", "Trending"]
     @State private var allUsers: [User] = []
     @State private var selectedIndex: Int = 0
+    @State private var cardOffsets: [Int: Bool] = [:]
     
     @AppStorage("bumble_home_filter") private var selectedFilter: String = "Everyone"
 
@@ -30,12 +31,10 @@ struct BumbleHomeView: View {
                             let isCurrent = selectedIndex == index
                             let isNext = selectedIndex + 1 == index
                             if isPrevious || isCurrent || isNext {
-                                Rectangle()
-                                    .fill(.blue)
-                                    .overlay {
-                                        Text("\(index)")
-                                    }
+                                let offsetValue = cardOffsets[user.id]
+                                userProfileView(index: index)
                                     .zIndex(Double(allUsers.count - index))
+                                    .offset(x: offsetValue == nil ? 0 : offsetValue == true ? 900 : -900)
                             }
                         }
                     } else {
@@ -43,12 +42,20 @@ struct BumbleHomeView: View {
                     }
                 }
                 .frame(maxHeight: .infinity)
+                .animation(.smooth, value: cardOffsets)
             }
             .padding(8)
         }
         .task {
             await getUsers()
         }
+    }
+    
+    private func userDidSelect(index: Int, isLike: Bool) {
+        let user = allUsers[index]
+        cardOffsets[user.id] = isLike
+        
+        selectedIndex+=1
     }
     
     private func getUsers() async {
@@ -59,6 +66,29 @@ struct BumbleHomeView: View {
         } catch {
             
         }
+    }
+    
+    private func userProfileView(index: Int) -> some View {
+        Rectangle()
+            .fill(index == selectedIndex ? Color.purple : Color.purple.opacity(0.5))
+            .overlay {
+                Text("\(index)")
+            }
+            .withDragGesture(
+                .horizontal,
+                resets: true,
+                rotationMultiplier: 1.05,
+                onChanged: { dragOffset in
+                    
+                },
+                onEnded: { dragOffset in
+                    if dragOffset.width < -50 {
+                        userDidSelect(index: index, isLike: false)
+                    } else if dragOffset.width > 50 {
+                        userDidSelect(index: index, isLike: true)
+                    }
+                }
+            )
     }
     
     private var header: some View {
