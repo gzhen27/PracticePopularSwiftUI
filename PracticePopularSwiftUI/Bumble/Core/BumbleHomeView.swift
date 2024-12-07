@@ -9,6 +9,9 @@ import SwiftUI
 
 struct BumbleHomeView: View {
     @State private var filters: [String] = ["Everyone", "Trending"]
+    @State private var allUsers: [User] = []
+    @State private var selectedIndex: Int = 0
+    
     @AppStorage("bumble_home_filter") private var selectedFilter: String = "Everyone"
 
     var body: some View {
@@ -19,9 +22,42 @@ struct BumbleHomeView: View {
                 header
                 BumbleFilterView(options: filters, selection: $selectedFilter)
                     .background(Divider(), alignment: .bottom)
-                Spacer()
+//                BumbleCardView()
+                ZStack {
+                    if !allUsers.isEmpty {
+                        ForEach(Array(allUsers.enumerated()), id: \.offset) { (index, user) in
+                            let isPrevious = selectedIndex - 1 == index
+                            let isCurrent = selectedIndex == index
+                            let isNext = selectedIndex + 1 == index
+                            if isPrevious || isCurrent || isNext {
+                                Rectangle()
+                                    .fill(.blue)
+                                    .overlay {
+                                        Text("\(index)")
+                                    }
+                                    .zIndex(Double(allUsers.count - index))
+                            }
+                        }
+                    } else {
+                        ProgressView()
+                    }
+                }
+                .frame(maxHeight: .infinity)
             }
             .padding(8)
+        }
+        .task {
+            await getUsers()
+        }
+    }
+    
+    private func getUsers() async {
+        guard allUsers.isEmpty else { return }
+        
+        do {
+            allUsers = try await DataCenter.getUsers()
+        } catch {
+            
         }
     }
     
