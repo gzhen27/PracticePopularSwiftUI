@@ -11,6 +11,8 @@ struct BumblePillView: View {
     var iconName: String?
     var emoji: String?
     var text: String = "Home Degree"
+    var font: Font = .callout
+    var fontWeight: Font.Weight = .medium
     var verticalPadding: CGFloat = 6
     var horizontalPadding: CGFloat = 12
     var foregroundColor: Color = .bumbleBlack
@@ -26,8 +28,8 @@ struct BumblePillView: View {
             
             Text(text)
         }
-        .font(.callout)
-        .fontWeight(.medium)
+        .font(font)
+        .fontWeight(fontWeight)
         .padding(.vertical, verticalPadding)
         .padding(.horizontal, horizontalPadding)
         .foregroundStyle(foregroundColor)

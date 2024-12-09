@@ -26,15 +26,16 @@ struct BumbleChatPreviewView: View {
             VStack(alignment: .leading) {
                 HStack {
                     Text(userName)
-                        .font(.title3)
-                        .fontWeight(.semibold)
+                        .font(.headline)
                         .foregroundStyle(.bumbleBlack)
                         .frame(maxWidth: .infinity, alignment: .leading)
                     if isYourMove {
                         BumblePillView(
                             text: "YOUR MOVE",
-                            verticalPadding: 2,
-                            horizontalPadding: 8,
+                            font: .caption2,
+                            fontWeight: .bold,
+                            verticalPadding: 4,
+                            horizontalPadding: 6,
                             backgroundColor: .bumbleYellow
                         )
                     }
@@ -42,13 +43,10 @@ struct BumbleChatPreviewView: View {
                 if let lastChatMessage {
                     Text(lastChatMessage)
                         .foregroundStyle(.bumbleGray)
-                        .lineLimit(1)
-                        .frame(maxWidth: .infinity, alignment: .leading)
                 }
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
+        .lineLimit(1)
     }
 }
 
