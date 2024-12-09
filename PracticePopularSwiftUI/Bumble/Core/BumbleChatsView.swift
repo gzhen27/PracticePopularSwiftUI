@@ -20,6 +20,8 @@ struct BumbleChatsView: View {
                 
                 matchQueueSection
                 
+                recentChatsSection
+                
                 Spacer()
             }
         }
@@ -70,6 +72,40 @@ struct BumbleChatsView: View {
                 .padding(.horizontal, 16)
             }
             .frame(height: 100)
+            .scrollIndicators(.hidden)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+    
+    private var recentChatsSection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack(spacing: 0) {
+                Text("Chats")
+                Text(" (Recent)")
+                    .foregroundStyle(.bumbleGray)
+                
+                Spacer()
+                
+                Image(systemName: "line.horizontal.3.decrease")
+                    .font(.title3)
+            }
+            .padding(.horizontal, 16)
+            
+            ScrollView(.vertical) {
+                LazyVStack(spacing: 16) {
+                    ForEach(allUsers) { user in
+                        BumbleChatPreviewView(
+                            imageName: user.image,
+                            percentageRemaining: Double.random(in: 0...1),
+                            hasNewMessage: Bool.random(),
+                            userName: user.firstName,
+                            lastChatMessage: user.aboutMe,
+                            isYourMove: Bool.random()
+                        )
+                    }
+                }
+                .padding(.horizontal, 16)
+            }
             .scrollIndicators(.hidden)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
