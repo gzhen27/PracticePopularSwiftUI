@@ -6,8 +6,11 @@
 //
 
 import SwiftUI
+import SwiftfulRouting
 
 struct BumbleChatsView: View {
+    @Environment(\.router) var router
+    
     @State private var allUsers: [User] = []
     
     var body: some View {
@@ -25,6 +28,7 @@ struct BumbleChatsView: View {
                 Spacer()
             }
         }
+        .toolbar(.hidden, for: .navigationBar)
         .task {
             await getUsers()
         }
@@ -43,6 +47,9 @@ struct BumbleChatsView: View {
     private var header: some View {
         HStack {
             Image(systemName: "line.horizontal.3")
+                .asButton {
+                    router.dismissScreen()
+                }
             Spacer()
             Image(systemName: "magnifyingglass")
         }
@@ -113,5 +120,7 @@ struct BumbleChatsView: View {
 }
 
 #Preview {
-    BumbleChatsView()
+    RouterView { _ in
+        BumbleChatsView()
+    }
 }
