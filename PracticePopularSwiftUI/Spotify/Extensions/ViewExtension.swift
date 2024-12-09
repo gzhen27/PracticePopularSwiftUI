@@ -18,9 +18,9 @@ extension View {
         .buttonStyle(ButtonStyleViewModifier(scale: scale, opacity: opacity, brightness: brightness))
     }
     
-    func asStretchyHeader(startingHeight: CGFloat) -> some View {
-        modifier(StretchyHeaderViewModifier(startingHeight: startingHeight))
-    }
+//    func asStretchyHeader(startingHeight: CGFloat) -> some View {
+//        modifier(StretchyHeaderViewModifier(startingHeight: startingHeight))
+//    }
     
     func themeColor(isSelected: Bool = false) -> some View {
         self
@@ -28,9 +28,9 @@ extension View {
             .foregroundStyle(isSelected ? Color.spotifyBlack : .spotifyWhite)
     }
     
-    func readingFrame(coordinateSpace: CoordinateSpace = .global, onChange: @escaping (_ frame: CGRect) -> ()) -> some View {
-        background(FrameReader(coordinationSpace: coordinateSpace, onChange: onChange))
-    }
+//    func readingFrame(coordinateSpace: CoordinateSpace = .global, onChange: @escaping (_ frame: CGRect) -> ()) -> some View {
+//        background(FrameReader(coordinationSpace: coordinateSpace, onChange: onChange))
+//    }
 }
 
 struct ButtonStyleViewModifier: ButtonStyle {
