@@ -17,11 +17,9 @@ struct NetflixHeroView: View {
     var onMylistPressed: (() -> Void)?
     
     var body: some View {
-        ZStack {
+        ZStack(alignment: .bottom) {
             ImageLoaderView(imageName: imageName)
             VStack(spacing: 16) {
-                Spacer()
-                
                 if isNetflixFilm {
                     HStack(spacing: 4) {
                         Text("N")
@@ -29,14 +27,16 @@ struct NetflixHeroView: View {
                             .font(.title)
                             .fontWeight(.heavy)
                         Text("FILM")
+                            .kerning(3)
+                            .font(.subheadline)
+                            .fontWeight(.semibold)
                             .foregroundStyle(.netflixLightGray)
                     }
                     .offset(y: 12)
                 }
-
+                
                 Text(title)
-                    .font(.largeTitle)
-                    .fontWeight(.semibold)
+                    .font(.system(size: 50, weight: .medium, design: .serif))
                 
                 HStack {
                     ForEach(categories, id: \.self) { category in
@@ -49,17 +49,17 @@ struct NetflixHeroView: View {
                     }
                 }
                 
-                HStack {
+                HStack(spacing: 16) {
                     HStack {
                         Image(systemName: "play.fill")
                         Text("Play")
                     }
-                    .padding(.vertical, 4)
-                    .frame(width: 120)
+                    .padding(.vertical, 8)
+                    .frame(maxWidth: .infinity)
                     .foregroundStyle(.netflixDarkGray)
                     .background(.netflixWhite)
                     .clipShape(RoundedRectangle(cornerRadius: 4))
-                    .onTapGesture {
+                    .asButton(.press) {
                         onPlayPressed?()
                         print("onPlayPressed")
                     }
@@ -68,25 +68,38 @@ struct NetflixHeroView: View {
                         Image(systemName: "plus")
                         Text("My List")
                     }
-                    .padding(.vertical, 4)
-                    .frame(width: 120)
+                    .padding(.vertical, 8)
+                    .frame(maxWidth: .infinity)
                     .foregroundStyle(.netflixWhite)
                     .background(.netflixDarkGray)
                     .clipShape(RoundedRectangle(cornerRadius: 4))
-                    .onTapGesture {
+                    .asButton(.press) {
                         onMylistPressed?()
                         print("onMylistPressed")
                     }
                 }
+                .font(.callout)
+                .fontWeight(.semibold)
             }
             .padding()
             .frame(maxWidth: .infinity)
             .foregroundStyle(.netflixWhite)
-            .background(.black.opacity(0.4))
+            .background(
+                LinearGradient(
+                    colors:[
+                        .netflixBlack.opacity(0),
+                        .netflixBlack.opacity(0.4),
+                        .netflixBlack.opacity(0.4),
+                        .netflixBlack.opacity(0.4),
+                    ],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+            )
         }
         .aspectRatio(0.8, contentMode: .fit)
         .clipShape(RoundedRectangle(cornerRadius: 8))
-        .onTapGesture {
+        .asButton(.tap) {
             onBackgroundPressed?()
             print("onBackgroundPressed")
         }
