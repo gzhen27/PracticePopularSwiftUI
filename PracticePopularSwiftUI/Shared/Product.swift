@@ -28,6 +28,10 @@ struct Product: Codable, Identifiable {
     
     var heroImage: String { images.first ?? Constants.staticImage }
     
+    var recentlyAdded: Bool {
+        Int.random(in: 1...4) == 1
+    }
+    
     static var mock: Product {
         Product(
             id: 123,

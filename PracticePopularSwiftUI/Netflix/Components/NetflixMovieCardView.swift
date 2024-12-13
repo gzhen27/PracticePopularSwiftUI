@@ -16,17 +16,24 @@ struct NetflixMovieCardView: View {
     var topTenRanking: Int?
     
     var body: some View {
-        ZStack(alignment: .bottom) {
-            ImageLoaderView(imageName: imageName)
+        HStack(alignment: .bottom, spacing: -8) {
+            if let topTenRanking {
+                Text("\(topTenRanking)")
+                    .font(.system(size: 100, weight: .medium, design: .serif))
+                    .offset(y: 20)
+            }
             
-            VStack(spacing: 0) {
-                if let title, let firstWord = title.components(separatedBy: " ").first {
-                    Text(firstWord)
-                        .font(.subheadline)
-                        .fontWeight(.medium)
-                        .lineLimit(1)
-                }
+            ZStack(alignment: .bottom) {
+                ImageLoaderView(imageName: imageName)
                 
+                VStack(spacing: 0) {
+                    if let title, let firstWord = title.components(separatedBy: " ").first {
+                        Text(firstWord)
+                            .font(.subheadline)
+                            .fontWeight(.medium)
+                            .lineLimit(1)
+                    }
+                    
                     Text("Recently Added")
                         .padding(.horizontal, 4)
                         .padding(.vertical, 2)
@@ -40,19 +47,21 @@ struct NetflixMovieCardView: View {
                         .minimumScaleFactor(0.1)
                         .padding(.horizontal, 8)
                         .opacity(isRecentlyAdded ? 1 : 0)
-            }
-            .padding(.top, 6)
-            .background(
-                LinearGradient(
-                    colors: [.netflixBlack.opacity(0), .netflixBlack.opacity(0.4), .netflixBlack.opacity(0.4)],
-                    startPoint: .top,
-                    endPoint: .bottom
+                }
+                .padding(.top, 6)
+                .background(
+                    LinearGradient(
+                        colors: [.netflixBlack.opacity(0), .netflixBlack.opacity(0.4), .netflixBlack.opacity(0.4)],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
                 )
-            )
+            }
+            .clipShape(RoundedRectangle(cornerRadius: 4))
+            .frame(width: width, height: height)
         }
-        .clipShape(RoundedRectangle(cornerRadius: 4))
-        .frame(width: width, height: height)
         .foregroundStyle(.netflixWhite)
+        .background(.purple.opacity(0.2))
     }
 }
 
@@ -60,9 +69,11 @@ struct NetflixMovieCardView: View {
     ZStack {
         Color.netflixBlack.ignoresSafeArea()
         
-        HStack(spacing: 16) {
+        VStack(spacing: 16) {
             NetflixMovieCardView()
             NetflixMovieCardView(isRecentlyAdded: true)
+            NetflixMovieCardView(topTenRanking: 7)
+            NetflixMovieCardView(isRecentlyAdded: true, topTenRanking: 10)
         }
     }
 }
