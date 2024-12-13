@@ -27,49 +27,18 @@ struct NetflixHomeView: View {
                         .frame(height: fullHeaderSize.height)
                     
                     if let heroProduct {
-                        NetflixHeroView(
-                            imageName: heroProduct.heroImage,
-                            isNetflixFilm: true,
-                            title: heroProduct.title,
-                            categories: [heroProduct.brand ?? "", heroProduct.title],
-                            onBackgroundPressed: {
-                                
-                            },
-                            onPlayPressed: {
-                                
-                            },
-                            onMylistPressed: {
-                                
-                            }
-                        )
-                        .padding(24)
+                        heroImageView(product: heroProduct)
                     }
                     
-                    ForEach(0..<10) { _ in
-                        RoundedRectangle(cornerRadius: 8)
-                            .fill(.purple.opacity(0.4))
-                            .frame(height: 200)
+                    LazyVStack(spacing: 16) {
+                        ForEach(Array(productRows.enumerated()), id: \.offset) { (index, productRow) in
+                            productRowSection(productRow: productRow, ranking: index == 1)
+                        }
                     }
                 }
             }
             
-            VStack {
-                header
-                    .padding(.horizontal, 16)
-                
-                NetflixCategoryBarView(
-                    categories: categories,
-                    selectedCategory: selectedCategory) {
-                        selectedCategory = nil
-                    } onCategoryPressed: { newCategory in
-                        selectedCategory = newCategory
-                    }
-                    .padding(.top, 2)
-            }
-            .background(.netflixBlack.opacity(0.9))
-            .readingFrame { frame in
-                fullHeaderSize = frame.size
-            }
+            navBar
         }
         .foregroundStyle(.netflixWhite)
         .task {
@@ -96,6 +65,26 @@ struct NetflixHomeView: View {
         }
     }
     
+    private var navBar: some View {
+        VStack {
+            header
+                .padding(.horizontal, 16)
+            
+            NetflixCategoryBarView(
+                categories: categories,
+                selectedCategory: selectedCategory) {
+                    selectedCategory = nil
+                } onCategoryPressed: { newCategory in
+                    selectedCategory = newCategory
+                }
+                .padding(.top, 2)
+        }
+        .background(.netflixBlack.opacity(0.9))
+        .readingFrame { frame in
+            fullHeaderSize = frame.size
+        }
+    }
+    
     private var header: some View {
         HStack(spacing: 0) {
             Text("For You")
@@ -107,6 +96,44 @@ struct NetflixHomeView: View {
                 Image(systemName: "magnifyingglass")
             }
             .font(.title2)
+        }
+    }
+    
+    private func heroImageView(product: Product) -> some View {
+        NetflixHeroView(
+            imageName: product.heroImage,
+            isNetflixFilm: true,
+            title: product.title,
+            categories: [product.brand ?? "", product.title],
+            onBackgroundPressed: {
+                
+            },
+            onPlayPressed: {
+                
+            },
+            onMylistPressed: {
+                
+            }
+        )
+        .padding(24)
+    }
+    
+    private func productRowSection(productRow: ProductRow, ranking: Bool = false) -> some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text(productRow.title)
+                .font(.headline)
+            ScrollView(.horizontal) {
+                LazyHStack {
+                    ForEach(Array(productRow.products.enumerated()), id: \.offset) { (index, product) in
+                        NetflixMovieCardView(
+                            imageName: product.heroImage,
+                            title: product.title,
+                            isRecentlyAdded: product.recentlyAdded,
+                            topTenRanking: ranking ? index + 1 : nil
+                        )
+                    }
+                }
+            }
         }
     }
 }
