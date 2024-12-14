@@ -15,28 +15,13 @@ struct NetflixHomeView: View {
     @State private var heroProduct: Product?
     @State private var currentUser: User?
     @State private var productRows: [ProductRow] = []
+    @State private var scrollViewOffset: CGFloat = 0
     
     var body: some View {
         ZStack(alignment: .top) {
             Color.netflixBlack.ignoresSafeArea()
             
-            ScrollView {
-                VStack(spacing: 8) {
-                    Rectangle()
-                        .opacity(0)
-                        .frame(height: fullHeaderSize.height)
-                    
-                    if let heroProduct {
-                        heroImageView(product: heroProduct)
-                    }
-                    
-                    LazyVStack(spacing: 16) {
-                        ForEach(Array(productRows.enumerated()), id: \.offset) { (index, productRow) in
-                            productRowSection(productRow: productRow, ranking: index == 1)
-                        }
-                    }
-                }
-            }
+            productsSection
             
             navBar
         }
@@ -70,18 +55,33 @@ struct NetflixHomeView: View {
             header
                 .padding(.horizontal, 16)
             
-            NetflixCategoryBarView(
-                categories: categories,
-                selectedCategory: selectedCategory) {
-                    selectedCategory = nil
-                } onCategoryPressed: { newCategory in
-                    selectedCategory = newCategory
-                }
-                .padding(.top, 2)
+            if scrollViewOffset > -20 {
+                NetflixCategoryBarView(
+                    categories: categories,
+                    selectedCategory: selectedCategory) {
+                        selectedCategory = nil
+                    } onCategoryPressed: { newCategory in
+                        selectedCategory = newCategory
+                    }
+                    .padding(.top, 2)
+                    .transition(.move(edge: .top).combined(with: .opacity))
+            }
         }
-        .background(.netflixBlack.opacity(0.9))
+        .padding(.bottom, 8)
+        .background(
+            ZStack {
+                if scrollViewOffset < -70 {
+                    Rectangle()
+                        .fill(.clear)
+                        .background(.ultraThinMaterial)
+                        .brightness(-0.4)
+                        .ignoresSafeArea()
+                }
+            }
+        )
+        .animation(.smooth, value: scrollViewOffset)
         .readingFrame { frame in
-            fullHeaderSize = frame.size
+            fullHeaderSize = fullHeaderSize == .zero ? frame.size : fullHeaderSize
         }
     }
     
@@ -118,6 +118,29 @@ struct NetflixHomeView: View {
         .padding(24)
     }
     
+    private var productsSection: some View {
+        ScrollViewWithOnScrollChanged(.vertical, showsIndicators: false) {
+            VStack(spacing: 8) {
+                Rectangle()
+                    .opacity(0)
+                    .frame(height: 0)
+                    .padding(.bottom, fullHeaderSize.height)
+                
+                if let heroProduct {
+                    heroImageView(product: heroProduct)
+                }
+                
+                LazyVStack(spacing: 16) {
+                    ForEach(Array(productRows.enumerated()), id: \.offset) { (index, productRow) in
+                        productRowSection(productRow: productRow, ranking: index == 1)
+                    }
+                }
+            }
+        } onScrollChanged: { offset in
+            scrollViewOffset = offset.y
+        }
+    }
+    
     private func productRowSection(productRow: ProductRow, ranking: Bool = false) -> some View {
         VStack(alignment: .leading, spacing: 6) {
             Text(productRow.title)
@@ -128,7 +151,7 @@ struct NetflixHomeView: View {
                         NetflixMovieCardView(
                             imageName: product.heroImage,
                             title: product.title,
-                            isRecentlyAdded: product.recentlyAdded,
+                            isRecentlyAdded: index % 2 == 0,
                             topTenRanking: ranking ? index + 1 : nil
                         )
                     }
