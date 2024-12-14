@@ -10,6 +10,8 @@ import SwiftUI
 struct NetflixMovieDetailView: View {
     var product: Product = .mock
     
+    @State private var progress: Double = 0.7
+    
     var body: some View {
         ZStack {
             Color.netflixBlack.ignoresSafeArea()
@@ -17,7 +19,8 @@ struct NetflixMovieDetailView: View {
             
             VStack(spacing: 0) {
                 NetflixDetailsHeaderView(
-                    progress: 0.7) {
+                    progress: $progress,
+                    imageName: product.heroImage) {
                         
                     } onXMarkPressed: {
                         
