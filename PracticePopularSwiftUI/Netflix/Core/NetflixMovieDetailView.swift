@@ -25,8 +25,29 @@ struct NetflixMovieDetailView: View {
                     } onXMarkPressed: {
                         
                     }
+                ScrollView {
+                    VStack(spacing: 6) {
+                        NetflixDetailsProductView(
+                            title: product.title,
+                            isNew: true,
+                            yearReleased: "2024",
+                            seasonCount: 7,
+                            hasClosedCaptions: true,
+                            topTen: 7,
+                            descriptionText: product.description,
+                            castText: "Cast: G, G-vx, G-EX",
+                            onPlayPress: {
+                                
+                            },
+                            onDownloadPress: {
+                                
+                            }
+                        )
+                    }
+                    .padding(8)
+                }
+                .scrollIndicators(.hidden)
             }
-            .frame(maxHeight: .infinity, alignment: .top)
         }
     }
 }
