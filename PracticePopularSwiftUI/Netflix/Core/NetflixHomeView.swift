@@ -21,6 +21,8 @@ struct NetflixHomeView: View {
         ZStack(alignment: .top) {
             Color.netflixBlack.ignoresSafeArea()
             
+            backgroundGradientLayer
+            
             productsSection
             
             navBar
@@ -99,6 +101,19 @@ struct NetflixHomeView: View {
         }
     }
     
+    private var backgroundGradientLayer: some View {
+        ZStack {
+            LinearGradient(colors: [.netflixDarkGray.opacity(1), .netflixDarkGray.opacity(0)], startPoint: .top, endPoint: .bottom)
+                .ignoresSafeArea()
+            
+            LinearGradient(colors: [.netflixDarkRed.opacity(0.5), .netflixDarkRed.opacity(0)], startPoint: .top, endPoint: .bottom)
+                .ignoresSafeArea()
+        }
+        .frame(maxHeight: max(scrollViewOffset * 0.75 + 400, 10))
+        .opacity(scrollViewOffset < -250 ? 0 : 1)
+        .animation(.easeInOut, value: scrollViewOffset)
+    }
+    
     private func heroImageView(product: Product) -> some View {
         NetflixHeroView(
             imageName: product.heroImage,
@@ -137,7 +152,7 @@ struct NetflixHomeView: View {
                 }
             }
         } onScrollChanged: { offset in
-            scrollViewOffset = offset.y
+            scrollViewOffset = min(offset.y, 0)
         }
     }
     
@@ -145,6 +160,7 @@ struct NetflixHomeView: View {
         VStack(alignment: .leading, spacing: 6) {
             Text(productRow.title)
                 .font(.headline)
+                .padding(.leading)
             ScrollView(.horizontal) {
                 LazyHStack {
                     ForEach(Array(productRow.products.enumerated()), id: \.offset) { (index, product) in
@@ -156,7 +172,9 @@ struct NetflixHomeView: View {
                         )
                     }
                 }
+                .padding(.leading)
             }
+            .scrollIndicators(.hidden)
         }
     }
 }

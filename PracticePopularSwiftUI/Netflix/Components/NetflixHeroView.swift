@@ -37,6 +37,7 @@ struct NetflixHeroView: View {
                 
                 Text(title)
                     .font(.system(size: 50, weight: .medium, design: .serif))
+                    .lineLimit(1)
                 
                 HStack {
                     ForEach(categories, id: \.self) { category in
