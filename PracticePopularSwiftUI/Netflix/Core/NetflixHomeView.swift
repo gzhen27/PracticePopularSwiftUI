@@ -7,8 +7,11 @@
 
 import SwiftUI
 import SwiftfulUI
+import SwiftfulRouting
 
 struct NetflixHomeView: View {
+    @Environment(\.router) var router
+    
     @State private var categories: [NetflixCategory] = NetflixCategory.mock
     @State private var selectedCategory: NetflixCategory?
     @State private var fullHeaderSize: CGSize = .zero
@@ -49,6 +52,12 @@ struct NetflixHomeView: View {
             productRows = rows
         } catch {
             
+        }
+    }
+    
+    private func onProductPressed(_ product: Product) {
+        router.showScreen(.sheet) { _ in
+            NetflixMovieDetailView(product: product)
         }
     }
     
@@ -95,7 +104,13 @@ struct NetflixHomeView: View {
             
             HStack(spacing: 16) {
                 Image(systemName: "tv.badge.wifi")
+                    .onTapGesture {
+                        router.dismissScreen()
+                    }
                 Image(systemName: "magnifyingglass")
+                    .onTapGesture {
+                        router.dismissScreen()
+                    }
             }
             .font(.title2)
         }
@@ -121,10 +136,10 @@ struct NetflixHomeView: View {
             title: product.title,
             categories: [product.brand ?? "", product.title],
             onBackgroundPressed: {
-                
+                onProductPressed(product)
             },
             onPlayPressed: {
-                
+                onProductPressed(product)
             },
             onMylistPressed: {
                 
@@ -170,6 +185,9 @@ struct NetflixHomeView: View {
                             isRecentlyAdded: index % 2 == 0,
                             topTenRanking: ranking ? index + 1 : nil
                         )
+                        .onTapGesture {
+                            onProductPressed(product)
+                        }
                     }
                 }
                 .padding(.leading)
@@ -180,5 +198,7 @@ struct NetflixHomeView: View {
 }
 
 #Preview {
-    NetflixHomeView()
+    RouterView { _ in
+        NetflixHomeView()
+    }
 }
