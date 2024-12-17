@@ -27,6 +27,12 @@ struct ContentView: View {
                         BumbleHomeView()
                     }
                 }
+                
+                navigationButton("Netflix UI") {
+                    router.showScreen(.fullScreenCover) { _ in
+                        NetflixHomeView()
+                    }
+                }
             }
             .frame(maxHeight: .infinity, alignment: .top)
             .padding(.top)

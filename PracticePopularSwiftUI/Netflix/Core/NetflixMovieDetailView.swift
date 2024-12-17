@@ -6,8 +6,11 @@
 //
 
 import SwiftUI
+import SwiftfulRouting
 
 struct NetflixMovieDetailView: View {
+    @Environment(\.router) var router
+    
     var product: Product = .mock
     
     @State private var progress: Double = 0.7
@@ -25,7 +28,7 @@ struct NetflixMovieDetailView: View {
                     imageName: product.heroImage) {
                         
                     } onXMarkPressed: {
-                        
+                        router.dismissScreen()
                     }
                 ScrollView {
                     VStack(alignment: .leading, spacing: 6) {
@@ -51,6 +54,12 @@ struct NetflixMovieDetailView: View {
             products = try await DataCenter.getProducts()
         } catch {
             
+        }
+    }
+    
+    private func onProductPressed(_ product: Product) {
+        router.showScreen(.sheet) { _ in
+            NetflixMovieDetailView(product: product)
         }
     }
     
@@ -101,6 +110,9 @@ struct NetflixMovieDetailView: View {
                         isRecentlyAdded: false,
                         topTenRanking: nil
                     )
+                    .onTapGesture {
+                        onProductPressed(product)
+                    }
                 }
             }
         }
@@ -108,5 +120,7 @@ struct NetflixMovieDetailView: View {
 }
 
 #Preview {
-    NetflixMovieDetailView()
+    RouterView { _ in
+        NetflixMovieDetailView()
+    }
 }
